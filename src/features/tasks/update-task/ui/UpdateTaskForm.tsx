@@ -3,7 +3,7 @@ import type { FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Input, Textarea, Select } from '@shared/ui';
 import { TaskStatus } from '@entities/task';
-import type { Task, UpdateTaskDto } from '@entities/task';
+import type { Task, UpdateTaskDto, TaskStatusType } from '@entities/task';
 import { taskApi } from '@shared/api/task-api';
 import styles from './UpdateTaskForm.module.css';
 
@@ -13,7 +13,7 @@ export function UpdateTaskForm() {
   const [task, setTask] = useState<Task | null>(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [status, setStatus] = useState<TaskStatus>(TaskStatus.PENDING);
+  const [status, setStatus] = useState<TaskStatusType>(TaskStatus.PENDING);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -118,7 +118,7 @@ export function UpdateTaskForm() {
       <Select
         label="Статус"
         value={status}
-        onChange={(e) => setStatus(e.target.value as TaskStatus)}
+        onChange={(e) => setStatus(e.target.value as TaskStatusType)}
         options={statusOptions}
         disabled={isSaving}
       />
