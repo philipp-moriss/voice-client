@@ -1,0 +1,60 @@
+.page {
+  min-height: 100vh;
+  padding: 32px;
+  position: relative;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.title {
+  margin: 0;
+  font-size: 48px;
+  font-weight: 600;
+  color: #ffffff;
+  text-align: center;
+  letter-spacing: -0.03em;
+}
+
+.createCard {
+  margin-bottom: 8px;
+}
+
+.sectionTitle {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.listSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 20px;
+  }
+
+  .container {
+    gap: 32px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .sectionTitle {
+    font-size: 18px;
+  }
+}
+

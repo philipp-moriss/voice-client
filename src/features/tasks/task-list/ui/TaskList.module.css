@@ -1,0 +1,129 @@
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.taskCard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.taskHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.taskTitle {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: #ffffff;
+  flex: 1;
+  letter-spacing: -0.02em;
+}
+
+.status {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusPending {
+  background: #2a2a2a;
+  color: #ffffff;
+  border: 1px solid #3a3a3a;
+}
+
+.statusProcessing {
+  background: #2a2a2a;
+  color: #ffffff;
+  border: 1px solid #3a3a3a;
+}
+
+.statusCompleted {
+  background: #00ff88;
+  color: #000000;
+  border: 1px solid #00ff88;
+}
+
+.statusFailed {
+  background: transparent;
+  color: #ff4444;
+  border: 1px solid #ff4444;
+}
+
+.taskDescription {
+  margin: 0;
+  color: #999999;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.taskMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: #666666;
+  padding-top: 12px;
+  border-top: 1px solid #1a1a1a;
+}
+
+.taskDate {
+  display: block;
+}
+
+.taskActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.loading,
+.empty,
+.error {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666666;
+  font-size: 15px;
+}
+
+.empty {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .taskHeader {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .taskTitle {
+    font-size: 18px;
+  }
+
+  .taskActions {
+    flex-direction: column;
+  }
+
+  .taskActions button {
+    width: 100%;
+  }
+}
+
