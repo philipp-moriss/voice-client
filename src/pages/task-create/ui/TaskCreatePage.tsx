@@ -1,13 +1,17 @@
 import { useNavigate } from 'react-router-dom';
-import { UpdateTaskForm } from '@features/tasks/update-task';
+import { CreateTaskForm } from '@features/tasks/create-task';
 import { Button, Card } from '@shared/ui';
-import styles from './TaskEditPage.module.css';
+import styles from './TaskCreatePage.module.css';
 
-export function TaskEditPage() {
+export function TaskCreatePage() {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
     navigate(-1);
+  };
+
+  const handleTaskCreated = () => {
+    navigate('/');
   };
 
   return (
@@ -19,7 +23,8 @@ export function TaskEditPage() {
           </Button>
         </div>
         <Card>
-          <UpdateTaskForm />
+          <h2 className={styles.title}>Создать новую задачу</h2>
+          <CreateTaskForm onSuccess={handleTaskCreated} />
         </Card>
       </div>
     </div>

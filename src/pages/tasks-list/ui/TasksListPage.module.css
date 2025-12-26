@@ -12,17 +12,19 @@
   gap: 40px;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
 .title {
   margin: 0;
   font-size: 48px;
   font-weight: 600;
   color: #ffffff;
-  text-align: center;
   letter-spacing: -0.03em;
-}
-
-.createCard {
-  margin-bottom: 8px;
 }
 
 .sectionTitle {
@@ -49,8 +51,15 @@
     gap: 32px;
   }
 
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
   .title {
     font-size: 36px;
+    text-align: center;
   }
 
   .sectionTitle {
