@@ -1,20 +1,28 @@
 import { TasksListPage, TaskCreatePage, TaskEditPage, NotFoundPage } from '@pages/index';
 import { createBrowserRouter } from 'react-router-dom';
+import { Layout } from '../layout';
+import { ROUTES } from '@shared/routes';
 
 export const router = createBrowserRouter([
   {
-    path: '/',
-    element: <TasksListPage />,
+    path: ROUTES.TASK_LIST,
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <TasksListPage />,
+      },
+    ],
   },
   {
     path: '/task',
     children: [
       {
-        path: 'create',
+        path: ROUTES.TASK_CREATE,
         element: <TaskCreatePage />,
       },
       {
-        path: ':id/edit',
+        path: ROUTES.TASK_EDIT(':id'),
         element: <TaskEditPage />,
       },
     ],

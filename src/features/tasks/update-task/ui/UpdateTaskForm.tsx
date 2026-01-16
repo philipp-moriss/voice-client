@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import type { FormEvent } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Input, Textarea, Select } from '@shared/ui';
+import { getTaskByIdAction, updateTaskAction } from '@/entities/task/api/actions';
+import type { Task, TaskStatusType } from '@entities/task';
 import { TaskStatus } from '@entities/task';
-import type { Task, UpdateTaskDto, TaskStatusType } from '@entities/task';
-import { taskApi } from '@shared/api/task-api';
+import { Button, Input, Select, Textarea } from '@shared/ui';
+import type { FormEvent } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import styles from './UpdateTaskForm.module.css';
 
 export function UpdateTaskForm() {
@@ -28,7 +28,7 @@ export function UpdateTaskForm() {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await taskApi.getTaskById(id);
+        const data = await getTaskByIdAction(id);
         setTask(data);
         setTitle(data.title);
         setDescription(data.description || '');
@@ -58,13 +58,7 @@ export function UpdateTaskForm() {
     setError(null);
 
     try {
-      const data: UpdateTaskDto = {
-        title: title.trim(),
-        description: description.trim() || undefined,
-        status,
-      };
-
-      await taskApi.updateTask(id, data);
+      await updateTaskAction(id, title, description, status);
       navigate('/');
     } catch (err) {
       setError('Не удалось обновить задачу');

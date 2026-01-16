@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Task } from '@entities/task';
-import { taskApi } from '@shared/api/task-api';
+import { deleteTaskAction, getAllTasksAction } from '@/entities/task/api/actions';
 import { Card, Button } from '@shared/ui';
 import styles from './TaskList.module.css';
 
@@ -19,7 +19,7 @@ export function TaskList({ onTaskDeleted }: TaskListProps) {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await taskApi.getAllTasks();
+      const data = await getAllTasksAction();
       setTasks(data);
     } catch (err) {
       setError('Не удалось загрузить задачи');
@@ -39,7 +39,7 @@ export function TaskList({ onTaskDeleted }: TaskListProps) {
     }
 
     try {
-      await taskApi.deleteTask(id);
+      await deleteTaskAction(id);
       await loadTasks();
       onTaskDeleted?.();
     } catch (err) {

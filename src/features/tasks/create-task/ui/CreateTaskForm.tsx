@@ -1,8 +1,7 @@
-import { useState } from 'react';
-import type { FormEvent } from 'react';
+import { createTaskAction } from '@/entities/task/api/actions';
 import { Button, Input, Textarea } from '@shared/ui';
-import type { CreateTaskDto } from '@entities/task';
-import { taskApi } from '@shared/api/task-api';
+import type { FormEvent } from 'react';
+import { useState } from 'react';
 import styles from './CreateTaskForm.module.css';
 
 interface CreateTaskFormProps {
@@ -27,12 +26,7 @@ export function CreateTaskForm({ onSuccess }: CreateTaskFormProps) {
     setError(null);
 
     try {
-      const data: CreateTaskDto = {
-        title: title.trim(),
-        description: description.trim() || undefined,
-      };
-      
-      await taskApi.createTask(data);
+      await createTaskAction(title, description);
       setTitle('');
       setDescription('');
       onSuccess?.();

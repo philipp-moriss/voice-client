@@ -1,4 +1,4 @@
-import { apiClient } from './axios-instance';
+import { apiClient } from '@shared/api/axios-instance';
 import type { Task, CreateTaskDto, UpdateTaskDto } from '@entities/task';
 
 export const taskApi = {
