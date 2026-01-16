@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { UpdateTaskForm } from '@features/tasks/update-task';
 import { Button, Card } from '@shared/ui';
-import styles from './TaskEditPage.module.css';
+import styles from './edit.module.css';
 
 export function TaskEditPage() {
   const navigate = useNavigate();

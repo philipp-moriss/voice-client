@@ -21,7 +21,7 @@
   margin: 0;
   font-size: 20px;
   font-weight: 500;
-  color: #ffffff;
+  color: var(--color-text-primary);
   flex: 1;
   letter-spacing: -0.02em;
 }
@@ -37,32 +37,32 @@
 }
 
 .statusPending {
-  background: #2a2a2a;
-  color: #ffffff;
-  border: 1px solid #3a3a3a;
+  background: var(--color-border-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-tertiary);
 }
 
 .statusProcessing {
-  background: #2a2a2a;
-  color: #ffffff;
-  border: 1px solid #3a3a3a;
+  background: var(--color-border-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-tertiary);
 }
 
 .statusCompleted {
-  background: #00ff88;
-  color: #000000;
-  border: 1px solid #00ff88;
+  background: var(--color-accent-primary);
+  color: var(--color-primary);
+  border: 1px solid var(--color-accent-primary);
 }
 
 .statusFailed {
   background: transparent;
-  color: #ff4444;
-  border: 1px solid #ff4444;
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
 }
 
 .taskDescription {
   margin: 0;
-  color: #999999;
+  color: var(--color-text-secondary);
   line-height: 1.5;
   font-size: 14px;
 }
@@ -72,9 +72,9 @@
   flex-direction: column;
   gap: 4px;
   font-size: 12px;
-  color: #666666;
+  color: var(--color-text-tertiary);
   padding-top: 12px;
-  border-top: 1px solid #1a1a1a;
+  border-top: 1px solid var(--color-border-primary);
 }
 
 .taskDate {
@@ -92,7 +92,7 @@
 .error {
   text-align: center;
   padding: 60px 20px;
-  color: #666666;
+  color: var(--color-text-tertiary);
   font-size: 15px;
 }
 

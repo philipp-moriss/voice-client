@@ -16,7 +16,7 @@
   margin: 0 0 24px 0;
   font-size: 24px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--color-text-primary);
   letter-spacing: -0.02em;
 }
 

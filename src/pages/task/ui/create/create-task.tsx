@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { CreateTaskForm } from '@features/tasks/create-task';
 import { Button, Card } from '@shared/ui';
-import styles from './TaskCreatePage.module.css';
+import styles from './create.module.css';
 
 export function TaskCreatePage() {
   const navigate = useNavigate();

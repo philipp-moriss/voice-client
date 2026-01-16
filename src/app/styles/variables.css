@@ -1,0 +1,40 @@
+:root {
+  /* Основные цвета */
+  --color-primary: #000000;
+  --color-secondary: #ffffff;
+  
+  /* Фоновые цвета */
+  --color-bg-primary: #000000;
+  --color-bg-secondary: #0a0a0a;
+  --color-bg-tertiary: #111111;
+  --color-bg-hover: #1a1a1a;
+  
+  /* Границы */
+  --color-border-primary: #1a1a1a;
+  --color-border-secondary: #2a2a2a;
+  --color-border-tertiary: #3a3a3a;
+  
+  /* Акцентные цвета */
+  --color-accent-primary: #00ff88;
+  --color-accent-primary-hover: #00e67a;
+  --color-accent-primary-active: #00cc6a;
+  
+  /* Цвета ошибок */
+  --color-error: #ff4444;
+  
+  /* Текстовые цвета */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #999999;
+  --color-text-tertiary: #666666;
+  --color-text-placeholder: #666666;
+  
+  /* Устаревшие цвета (для обратной совместимости) */
+  --color-tertiary: #f0f0f0;
+  --color-quaternary: #e0e0e0;
+  --color-quinary: #d0d0d0;
+  --color-senary: #c0c0c0;
+  --color-septenary: #b0b0b0;
+  --color-octonary: #a0a0a0;
+  --color-nonary: #909090;
+  --color-denary: #808080;
+}

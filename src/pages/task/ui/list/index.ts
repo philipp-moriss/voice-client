@@ -1,0 +1,1 @@
+export { TasksListPage } from './tasks-list';

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TaskList } from '@features/tasks/task-list';
 import { Button } from '@shared/ui';
-import styles from './TasksListPage.module.css';
+import styles from './list.module.css';
 
 export function TasksListPage() {
   const navigate = useNavigate();
