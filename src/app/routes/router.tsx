@@ -2,33 +2,53 @@ import { TasksListPage, TaskCreatePage, TaskEditPage, NotFoundPage } from '@page
 import { createBrowserRouter } from 'react-router-dom';
 import { Layout } from '../layout';
 import { ROUTES } from '@shared/routes';
+import { AuthProvider, ProtectedRoute, SignInPage, SignInCallbackPage } from '@features/auth';
 
 export const router = createBrowserRouter([
   {
-    path: ROUTES.TASK_LIST,
-    element: <Layout />,
+    path: '/',
+    element: (
+      <AuthProvider>
+        <Layout />
+      </AuthProvider>
+    ),
     children: [
+      {
+        path: ROUTES.SIGN_IN.slice(1),
+        element: <SignInPage />,
+      },
+      {
+        path: 'signin/callback',
+        element: <SignInCallbackPage />,
+      },
       {
         index: true,
-        element: <TasksListPage />,
-      },
-    ],
-  },
-  {
-    path: '/task',
-    children: [
-      {
-        path: ROUTES.TASK_CREATE,
-        element: <TaskCreatePage />,
+        element: (
+          <ProtectedRoute>
+            <TasksListPage />
+          </ProtectedRoute>
+        ),
       },
       {
-        path: ROUTES.TASK_EDIT(':id'),
-        element: <TaskEditPage />,
+        path: 'task/create',
+        element: (
+          <ProtectedRoute>
+            <TaskCreatePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'task/:id/edit',
+        element: (
+          <ProtectedRoute>
+            <TaskEditPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '*',
+        element: <NotFoundPage />,
       },
     ],
-  },
-  {
-    path: '*',
-    element: <NotFoundPage />,
   },
 ]);

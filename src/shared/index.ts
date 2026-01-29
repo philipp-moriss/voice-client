@@ -1,5 +1,5 @@
 export { ROUTES } from './routes';
-export { apiClient } from './api/axios-instance';
+export { apiClient } from './api';
 export { Button } from './ui/Button';
 export { Input } from './ui/Input';
 export { Select } from './ui/Select';
