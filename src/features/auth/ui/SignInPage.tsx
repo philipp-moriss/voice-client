@@ -1,14 +1,13 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { LoginButton } from '@telegram-auth/react';
 import { apiClient } from '@shared/api/axios-instance';
 import { envConfig } from '@shared/config/env';
 import { ROUTES } from '@shared/routes';
 import { useAuth } from '../context/auth-context';
 
-const TELEGRAM_SCRIPT_URL = 'https://telegram.org/js/telegram-widget.js?22';
-
-/** Формат объекта из Telegram Widget (data-onauth), см. https://core.telegram.org/widgets/login */
-interface TelegramWidgetUser {
+/** Данные из Telegram Login Widget, см. https://core.telegram.org/widgets/login */
+interface TelegramAuthData {
   id: number;
   first_name?: string;
   last_name?: string;
@@ -18,31 +17,39 @@ interface TelegramWidgetUser {
   hash: string;
 }
 
-const GLOBAL_CALLBACK_NAME = 'onTelegramAuthCallback';
-
 export function SignInPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
   const botUsername = envConfig.TELEGRAM_BOT_USERNAME;
   const navigate = useNavigate();
   const { setAuth } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleTelegramAuth = useCallback(
-    async (user: TelegramWidgetUser) => {
+  const handleAuth = useCallback(
+    async (data: TelegramAuthData) => {
       setError(null);
       setLoading(true);
       try {
-        const { data } = await apiClient.post<{
+        const { data: res } = await apiClient.post<{
           accessToken: string;
-          user: { id: number; telegramId: string; firstName: string | null; lastName: string | null; username: string | null };
-        }>('/auth/telegram', user);
-        setAuth(data.accessToken, data.user);
+          user: {
+            id: number;
+            telegramId: string;
+            firstName: string | null;
+            lastName: string | null;
+            username: string | null;
+          };
+        }>('/auth/telegram', data);
+        setAuth(res.accessToken, res.user);
         navigate(ROUTES.TASK_LIST, { replace: true });
       } catch (err: unknown) {
-        const e = err as { response?: { data?: { message?: string | string[] }; status?: number }; code?: string };
+        const e = err as {
+          response?: { data?: { message?: string | string[] }; status?: number };
+          code?: string;
+        };
         const msg = e.response?.data?.message
-          ? Array.isArray(e.response.data.message) ? e.response.data.message.join(', ') : e.response.data.message
+          ? Array.isArray(e.response.data.message)
+            ? e.response.data.message.join(', ')
+            : e.response.data.message
           : e.code === 'ERR_NETWORK'
             ? 'Бэкенд недоступен. Проверьте VITE_API_URL.'
             : e.response?.status === 401
@@ -56,30 +63,16 @@ export function SignInPage() {
     [setAuth, navigate],
   );
 
-  useEffect(() => {
-    const win = window as unknown as Record<string, unknown>;
-    win[GLOBAL_CALLBACK_NAME] = (user: TelegramWidgetUser) => {
-      handleTelegramAuth(user);
-    };
-    return () => {
-      delete win[GLOBAL_CALLBACK_NAME];
-    };
-  }, [handleTelegramAuth]);
-
-  useEffect(() => {
-    if (!botUsername || !containerRef.current) return;
-
-    const script = document.createElement('script');
-    script.src = TELEGRAM_SCRIPT_URL;
-    script.async = true;
-    script.setAttribute('data-telegram-login', botUsername);
-    script.setAttribute('data-size', 'large');
-    script.setAttribute('data-onauth', GLOBAL_CALLBACK_NAME);
-    script.setAttribute('data-request-access', 'write');
-
-    containerRef.current.innerHTML = '';
-    containerRef.current.appendChild(script);
-  }, [botUsername]);
+  if (!botUsername) {
+    return (
+      <div style={{ padding: '2rem', textAlign: 'center' }}>
+        <h1 style={{ marginBottom: '1rem' }}>Вход</h1>
+        <p style={{ color: '#c00' }}>
+          Укажите VITE_TELEGRAM_BOT_USERNAME в .env для виджета входа.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -87,22 +80,27 @@ export function SignInPage() {
       <p style={{ marginBottom: '1.5rem', color: '#666' }}>
         Войдите через Telegram, чтобы видеть свои задачи.
       </p>
-      {loading && <p style={{ marginTop: '1rem', color: '#666' }}>Выполняется вход…</p>}
+      <p style={{ marginBottom: '1rem', fontSize: '0.9rem', color: '#555' }}>
+        После нажатия кнопки подтвердите доступ в Telegram — откроется список задач.
+      </p>
+      {loading && <p style={{ marginBottom: '1rem', color: '#666' }}>Выполняется вход…</p>}
       {error && (
-        <p style={{ marginTop: '1rem', color: '#c00', fontSize: '0.9rem' }}>{error}</p>
+        <p style={{ marginBottom: '1rem', color: '#c00', fontSize: '0.9rem' }}>{error}</p>
       )}
-      {botUsername ? (
-        <>
-          <div ref={containerRef} data-testid="telegram-login-widget" />
-          <p style={{ marginTop: '1rem', fontSize: '0.85rem', color: '#888' }}>
-            Если виджет показывает «Bot domain invalid» — в BotFather отправьте /setdomain и укажите домен этой страницы (без https:// и порта).
-          </p>
-        </>
-      ) : (
-        <p style={{ color: '#c00' }}>
-          Укажите VITE_TELEGRAM_BOT_USERNAME в .env для виджета входа.
-        </p>
-      )}
+      <div style={{ display: 'inline-block', marginBottom: '1rem' }}>
+        <LoginButton
+          botUsername={botUsername.replace(/^@/, '')}
+          onAuthCallback={handleAuth}
+          buttonSize="large"
+          cornerRadius={8}
+          showAvatar={true}
+          lang="ru"
+        />
+      </div>
+      <p style={{ fontSize: '0.85rem', color: '#888' }}>
+        Если виджет показывает «Bot domain invalid» — в BotFather отправьте /setdomain и укажите
+        домен этой страницы (без https:// и порта).
+      </p>
     </div>
   );
 }
