@@ -14,7 +14,7 @@ export function SignInPage() {
     const script = document.createElement('script');
     script.src = TELEGRAM_SCRIPT_URL;
     script.async = true;
-    script.setAttribute('data-telegram-login', "@Philipp_assistant_bot");
+    script.setAttribute('data-telegram-login', botUsername);
     script.setAttribute('data-size', 'large');
     script.setAttribute(
       'data-auth-url',
