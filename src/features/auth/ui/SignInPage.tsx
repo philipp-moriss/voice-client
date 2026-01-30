@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginButton } from '@telegram-auth/react';
 import { apiClient } from '@shared/api/axios-instance';
@@ -62,6 +62,16 @@ export function SignInPage() {
     },
     [setAuth, navigate],
   );
+
+  // Telegram redirect flow: after auth Telegram redirects back with hash (#id=...&auth_date=...&hash=...)
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash) return;
+    const hasTelegramParams = hash.includes('id=') && hash.includes('auth_date=') && hash.includes('hash=');
+    if (hasTelegramParams) {
+      navigate(ROUTES.SIGN_IN_CALLBACK + hash, { replace: true });
+    }
+  }, [navigate]);
 
   if (!botUsername) {
     return (
