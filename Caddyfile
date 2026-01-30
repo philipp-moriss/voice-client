@@ -12,7 +12,7 @@
 }
 
 # site block, listens on the $PORT environment variable, automatically assigned by Railway
-:{5173} {
+:{$PORT:5173} {
 	log {
 		format json
 	}
