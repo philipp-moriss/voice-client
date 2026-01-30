@@ -27,11 +27,8 @@ FROM caddy
 # Create and change to the app directory
 WORKDIR /app
 
-# Copy Caddyfile to the container image
+# Copy Caddyfile to the container image (do not run caddy fmt — it would expand $PORT at build time and break Railway)
 COPY Caddyfile ./
-
-# Copy local code to the container image
-RUN caddy fmt Caddyfile --overwrite
 
 # Copy built files to the container image
 COPY --from=build /app/dist ./dist
