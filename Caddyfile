@@ -11,8 +11,8 @@
 	}
 }
 
-# site block, listens on the $PORT environment variable, automatically assigned by Railway
-:{$PORT:5173} {
+# site block: listen on all interfaces so Railway can reach the app
+0.0.0.0:{$PORT:5173} {
 	log {
 		format json
 	}
