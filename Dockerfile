@@ -18,6 +18,12 @@ RUN npm ci
 # Copy local code to the container image
 COPY . ./
 
+# Build-time env for Vite (pass via --build-arg or Railway Variables)
+ARG VITE_TELEGRAM_BOT_USERNAME
+ARG VITE_API_URL
+ENV VITE_TELEGRAM_BOT_USERNAME=$VITE_TELEGRAM_BOT_USERNAME
+ENV VITE_API_URL=$VITE_API_URL
+
 # Build the app
 RUN npm run build
 
