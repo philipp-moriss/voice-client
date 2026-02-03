@@ -32,3 +32,7 @@ export const updateTaskAction = async (id: string, title: string, description: s
   };
   return taskApi.updateTask(id, data);
 };
+
+export const updateTaskStatusAction = async (id: string, status: TaskStatus): Promise<Task> => {
+  return taskApi.updateTask(id, { status });
+};
