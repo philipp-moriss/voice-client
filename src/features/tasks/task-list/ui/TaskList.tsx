@@ -43,7 +43,7 @@ export function TaskList({ onTaskDeleted }: TaskListProps) {
   const [modalStatus, setModalStatus] = useState<TaskStatusType>(TaskStatus.PENDING);
   const [isSavingStatus, setIsSavingStatus] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Set<TaskStatusType>>(
-    () => new Set(STATUS_ORDER)
+    () => new Set([TaskStatus.PENDING])
   );
   const navigate = useNavigate();
 
