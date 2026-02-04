@@ -10,10 +10,15 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+public/workbox-*.js
+public/workbox-*.js.map
+# Иконки копируются из src/assets/fav при сборке
+public/fav
 *.local
 
 .env.env
 .env.*
+.env
 
 # Editor directories and files
 .vscode/*
