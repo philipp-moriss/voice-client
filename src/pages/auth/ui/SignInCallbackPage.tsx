@@ -52,6 +52,7 @@ export function SignInCallbackPage() {
     const from = ROUTES.TASK_LIST;
 
     if (!hash) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setError('Нет данных от Telegram. Попробуйте войти снова.' as string);
       return;
     }
@@ -60,7 +61,7 @@ export function SignInCallbackPage() {
     let payload: TelegramPayload;
     try {
       payload = hashParamsToPayload(params);
-    } catch (e) {
+    } catch {
       setError('Неверные данные авторизации.');
       return;
     }
