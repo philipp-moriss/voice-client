@@ -4,7 +4,7 @@ import { LoginButton } from '@telegram-auth/react';
 import { apiClient } from '@shared/api/axios-instance';
 import { envConfig } from '@shared/config/env';
 import { ROUTES } from '@shared/routes';
-import { useAuth } from '../context/auth-context';
+import { useAuth } from '@/shared/auth';
 
 /** Данные из Telegram Login Widget, см. https://core.telegram.org/widgets/login */
 interface TelegramAuthData {

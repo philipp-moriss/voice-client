@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@features/auth';
+import { useAuth } from '@/shared/auth';
 import { Button } from '@shared/ui';
 import { ROUTES } from '@shared/routes';
 import { ProfileIcon } from '@shared/ui/icons';

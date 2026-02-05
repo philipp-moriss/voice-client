@@ -6,6 +6,7 @@ import '@app/styles/variables.css'
 import '@app/styles/base.css'
 import { router } from '../routes'
 import { RouterProvider } from 'react-router-dom'
+import { AuthProvider } from '../providers/auth-provider'
 
 // В Telegram Mini App PWA (Service Worker) не регистрируем
 if (!isTelegramWebApp()) {
@@ -20,6 +21,8 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 )

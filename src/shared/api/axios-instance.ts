@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { envConfig, getStoredToken } from '../config/env';
+import { envConfig } from '../config';
+import { getStoredToken } from '@shared/auth';
 
 const BASE_URL = envConfig.API_URL;
 

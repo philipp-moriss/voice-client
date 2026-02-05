@@ -2,15 +2,14 @@ import { TasksListPage, TaskCreatePage, TaskEditPage, ProfilePage, NotFoundPage 
 import { createBrowserRouter } from 'react-router-dom';
 import { Layout } from '../layout';
 import { ROUTES } from '@shared/routes';
-import { AuthProvider, ProtectedRoute, SignInPage, SignInCallbackPage } from '@features/auth';
+import { ProtectedRoute } from './lib';
+import { SignInPage, SignInCallbackPage } from '@pages/auth';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <AuthProvider>
         <Layout />
-      </AuthProvider>
     ),
     children: [
       {

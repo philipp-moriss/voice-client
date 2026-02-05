@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '@shared/api/axios-instance';
-import { useAuth } from '../context/auth-context';
 import { ROUTES } from '@shared/routes';
+import { useAuth } from '@/shared/auth';
 
 interface TelegramPayload {
   id: number;
@@ -52,7 +52,7 @@ export function SignInCallbackPage() {
     const from = ROUTES.TASK_LIST;
 
     if (!hash) {
-      setError('Нет данных от Telegram. Попробуйте войти снова.');
+      setError('Нет данных от Telegram. Попробуйте войти снова.' as string);
       return;
     }
 

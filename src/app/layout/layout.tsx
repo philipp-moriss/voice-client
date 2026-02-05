@@ -2,7 +2,7 @@ import styles from './layout.module.css';
 import { Button } from '@/shared/ui/Button';
 import { PWAInstallBanner } from '@/shared/ui/PWAInstallBanner';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@features/auth';
+import { useAuth } from '@/shared/auth';
 import { ROUTES } from '@shared/routes';
 import { ProfileIcon } from '@shared/ui/icons';
 
