@@ -27,7 +27,7 @@ export const Layout = () => {
           <h1 className={styles.title}>
             {isSignIn ? 'Вход' : 'Управление задачами'}
           </h1>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div className={styles.actions}>
             {isAuthenticated && !isSignIn && (
               <>
                 <Button onClick={handleCreateTask}>+ Создать задачу</Button>

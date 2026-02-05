@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import type { Task, TaskStatusType } from '@entities/task';
 import { TaskStatus } from '@entities/task';
 import {
@@ -7,8 +6,11 @@ import {
   getAllTasksAction,
   updateTaskStatusAction,
 } from '@/entities/task/api/actions';
-import { Card, Button } from '@shared/ui';
+import { Button } from '@shared/ui';
 import styles from './TaskList.module.css';
+import { ChevronIcon } from '@shared/ui/icons';
+import { StatusModal } from './StatusModal';
+import { TaskItem } from './TaskItem';
 
 const STATUS_ORDER: TaskStatusType[] = [
   TaskStatus.PENDING,
@@ -24,13 +26,6 @@ const SECTION_TITLES: Record<TaskStatusType, string> = {
   [TaskStatus.FAILED]: 'С ошибкой',
 };
 
-const STATUS_OPTIONS = [
-  { value: TaskStatus.PENDING, label: 'Ожидает' },
-  { value: TaskStatus.PROCESSING, label: 'В процессе' },
-  { value: TaskStatus.COMPLETED, label: 'Завершена' },
-  { value: TaskStatus.FAILED, label: 'Ошибка' },
-];
-
 interface TaskListProps {
   onTaskDeleted?: () => void;
 }
@@ -45,8 +40,6 @@ export function TaskList({ onTaskDeleted }: TaskListProps) {
   const [expandedSections, setExpandedSections] = useState<Set<TaskStatusType>>(
     () => new Set([TaskStatus.PENDING])
   );
-  const navigate = useNavigate();
-
   const toggleSection = (status: TaskStatusType) => {
     setExpandedSections((prev) => {
       const next = new Set(prev);
@@ -117,16 +110,6 @@ export function TaskList({ onTaskDeleted }: TaskListProps) {
     }
   };
 
-  const getStatusClass = (status: string) => {
-    const statusClassMap: Record<string, string> = {
-      [TaskStatus.PENDING]: styles.statusPending,
-      [TaskStatus.PROCESSING]: styles.statusProcessing,
-      [TaskStatus.COMPLETED]: styles.statusCompleted,
-      [TaskStatus.FAILED]: styles.statusFailed,
-    };
-    return statusClassMap[status] || '';
-  };
-
   const tasksByStatus = STATUS_ORDER.map((status) => ({
     status,
     title: SECTION_TITLES[status],
@@ -174,70 +157,14 @@ export function TaskList({ onTaskDeleted }: TaskListProps) {
               className={`${styles.sectionContent} ${expandedSections.has(status) ? styles.sectionContentOpen : ''}`}
             >
               <div className={styles.sectionList}>
-              {sectionTasks.map((task) => (
-                <div
-                  key={task.id}
-                  className={styles.taskCardWrapper}
-                  onClick={() => openStatusModal(task)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      openStatusModal(task);
-                    }
-                  }}
-                >
-                <Card className={styles.taskCard}>
-                  <div className={styles.taskHeader}>
-                    <h3 className={styles.taskTitle}>{task.title}</h3>
-                    <div className={styles.taskHeaderRight}>
-                      <span
-                        className={`${styles.status} ${getStatusClass(task.status)}`}
-                      >
-                        {SECTION_TITLES[task.status]}
-                      </span>
-                      <button
-                        type="button"
-                        className={styles.editButton}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/task/${task.id}/edit`);
-                        }}
-                        aria-label="Редактировать задачу"
-                      >
-                        <PencilIcon />
-                      </button>
-                    </div>
-                  </div>
-                  {task.description && (
-                    <p className={styles.taskDescription}>{task.description}</p>
-                  )}
-                  <div className={styles.taskMeta}>
-                    <span className={styles.taskDate}>
-                      Создано: {new Date(task.createdAt).toLocaleString('ru-RU')}
-                    </span>
-                    {task.updatedAt !== task.createdAt && (
-                      <span className={styles.taskDate}>
-                        Обновлено:{' '}
-                        {new Date(task.updatedAt).toLocaleString('ru-RU')}
-                      </span>
-                    )}
-                  </div>
-                  <div className={styles.taskActions}>
-                    <Button
-                      variant="danger"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete(task.id);
-                      }}
-                    >
-                      Удалить
-                    </Button>
-                  </div>
-                </Card>
-                </div>
-              ))}
+                {sectionTasks.map((task) => (
+                  <TaskItem
+                    key={task.id}
+                    task={task}
+                    onOpenStatusModal={openStatusModal}
+                    onDelete={handleDelete}
+                  />
+                ))}
               </div>
             </div>
           </section>
@@ -245,86 +172,15 @@ export function TaskList({ onTaskDeleted }: TaskListProps) {
       )}
 
       {modalTask && (
-        <div
-          className={styles.modalOverlay}
-          onClick={closeStatusModal}
-          role="presentation"
-        >
-          <div
-            className={styles.modal}
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="status-modal-title"
-          >
-            <h3 id="status-modal-title" className={styles.modalTitle}>
-              {modalTask.title}
-            </h3>
-            <p className={styles.modalSubtitle}>Изменить статус задачи</p>
-            <div className={styles.statusPicker}>
-              {STATUS_OPTIONS.map((opt) => (
-                <button
-                  key={opt.value}
-                  type="button"
-                  className={`${styles.statusOption} ${styles[`statusOption_${opt.value}`]} ${modalStatus === opt.value ? styles.statusOptionSelected : ''}`}
-                  onClick={() => setModalStatus(opt.value as TaskStatusType)}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-            <div className={styles.modalActions}>
-              <Button variant="secondary" onClick={closeStatusModal}>
-                Отмена
-              </Button>
-              <Button
-                onClick={handleSaveStatus}
-                disabled={isSavingStatus || modalStatus === modalTask.status}
-              >
-                {isSavingStatus ? 'Сохранение…' : 'Сохранить'}
-              </Button>
-            </div>
-          </div>
-        </div>
+        <StatusModal
+          task={modalTask}
+          currentStatus={modalStatus}
+          onStatusChange={setModalStatus}
+          onClose={closeStatusModal}
+          onSave={handleSaveStatus}
+          isSaving={isSavingStatus}
+        />
       )}
     </div>
-  );
-}
-
-function PencilIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-      <path d="m15 5 4 4" />
-    </svg>
-  );
-}
-
-function ChevronIcon({ className = '' }: { className?: string }) {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
   );
 }
