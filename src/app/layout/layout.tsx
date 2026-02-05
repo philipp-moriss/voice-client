@@ -4,20 +4,20 @@ import { PWAInstallBanner } from '@/shared/ui/PWAInstallBanner';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@features/auth';
 import { ROUTES } from '@shared/routes';
+import { ProfileIcon } from '@shared/ui/icons';
 
 export const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated } = useAuth();
   const isSignIn = location.pathname === ROUTES.SIGN_IN || location.pathname === ROUTES.SIGN_IN_CALLBACK;
 
   const handleCreateTask = () => {
     navigate('/task/create');
   };
 
-  const handleSignOut = () => {
-    logout();
-    navigate(ROUTES.SIGN_IN, { replace: true });
+  const handleProfileClick = () => {
+    navigate(ROUTES.PROFILE);
   };
 
   return (
@@ -31,7 +31,14 @@ export const Layout = () => {
             {isAuthenticated && !isSignIn && (
               <>
                 <Button onClick={handleCreateTask}>+ Создать задачу</Button>
-                <Button onClick={handleSignOut}>Выйти</Button>
+                <button
+                  type="button"
+                  className={styles.profileButton}
+                  onClick={handleProfileClick}
+                  aria-label="Профиль"
+                >
+                  <ProfileIcon size={28} />
+                </button>
               </>
             )}
           </div>

@@ -1,4 +1,4 @@
-import { TasksListPage, TaskCreatePage, TaskEditPage, NotFoundPage } from '@pages/index';
+import { TasksListPage, TaskCreatePage, TaskEditPage, ProfilePage, NotFoundPage } from '@pages/index';
 import { createBrowserRouter } from 'react-router-dom';
 import { Layout } from '../layout';
 import { ROUTES } from '@shared/routes';
@@ -42,6 +42,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <TaskEditPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'profile',
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
           </ProtectedRoute>
         ),
       },

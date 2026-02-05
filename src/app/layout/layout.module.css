@@ -40,6 +40,24 @@
   display: flex;
   gap: 0.5rem;
   justify-content: space-between;
+  align-items: center;
+}
+
+.profileButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: transparent;
+  border: 1px solid var(--color-accent-primary);
+  color: var(--color-text-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.profileButton:hover {
+  background: var(--color-bg-secondary, rgba(0, 0, 0, 0.06));
 }
 
 @media (max-width: 768px) {
