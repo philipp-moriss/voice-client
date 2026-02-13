@@ -63,54 +63,87 @@ export function SignInPage() {
     [setAuth, navigate],
   );
 
-  // Telegram Mini App: автовход по initData без открытия браузера
+  // Telegram Mini App: ждём window.Telegram и initData (могут появиться с задержкой), затем автовход
   useEffect(() => {
-    const tg = (window as { Telegram?: { WebApp?: { initData?: string } } }).Telegram;
-    const initData = tg?.WebApp?.initData;
-    if (!initData?.trim()) return;
-
+    const win = window as Window & { Telegram?: { WebApp?: { initData?: string; ready?: () => void } } };
     let cancelled = false;
-    setLoading(true);
-    apiClient
-      .post<{
-        accessToken: string;
-        user: {
-          id: number;
-          telegramId: string;
-          firstName: string | null;
-          lastName: string | null;
-          username: string | null;
-        };
-      }>('/auth/telegram-webapp', { initData })
-      .then(({ data: res }) => {
-        if (!cancelled) {
-          setAuth(res.accessToken, res.user);
-          navigate(ROUTES.TASK_LIST, { replace: true });
-        }
-      })
-      .catch((err: unknown) => {
-        if (!cancelled) {
-          const e = err as {
-            response?: { data?: { message?: string | string[] }; status?: number };
-            code?: string;
+
+    function tryAuth(initData: string) {
+      if (!initData?.trim() || cancelled) return;
+      setLoading(true);
+      win.Telegram?.WebApp?.ready?.();
+      apiClient
+        .post<{
+          accessToken: string;
+          user: {
+            id: number;
+            telegramId: string;
+            firstName: string | null;
+            lastName: string | null;
+            username: string | null;
           };
-          const msg = e.response?.data?.message
-            ? Array.isArray(e.response.data.message)
-              ? (e.response.data.message as string[]).join(', ')
-              : (e.response.data.message as string)
-            : e.code === 'ERR_NETWORK'
-              ? 'Бэкенд недоступен. Проверьте VITE_API_URL.'
-              : e.response?.status === 401
-                ? 'Неверные данные от Telegram.'
-                : 'Ошибка входа. Попробуйте снова.';
-          setError(msg);
+        }>('/auth/telegram-webapp', { initData })
+        .then(({ data: res }) => {
+          if (!cancelled) {
+            setAuth(res.accessToken, res.user);
+            navigate(ROUTES.TASK_LIST, { replace: true });
+          }
+        })
+        .catch((err: unknown) => {
+          if (!cancelled) {
+            const e = err as {
+              response?: { data?: { message?: string | string[] }; status?: number };
+              code?: string;
+            };
+            const msg = e.response?.data?.message
+              ? Array.isArray(e.response.data.message)
+                ? (e.response.data.message as string[]).join(', ')
+                : (e.response.data.message as string)
+              : e.code === 'ERR_NETWORK'
+                ? 'Бэкенд недоступен. Проверьте VITE_API_URL.'
+                : e.response?.status === 401
+                  ? 'Неверные данные от Telegram.'
+                  : 'Ошибка входа. Попробуйте снова.';
+            setError(msg);
+          }
+        })
+        .finally(() => {
+          if (!cancelled) setLoading(false);
+        });
+    }
+
+    const initialData = win.Telegram?.WebApp?.initData;
+    if (initialData?.trim()) {
+      tryAuth(initialData);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    // В Mini App объект Telegram может внедряться с задержкой — опрашиваем до 3 с
+    let attempts = 0;
+    const maxAttempts = 30;
+    const interval = setInterval(() => {
+      if (cancelled || attempts >= maxAttempts) {
+        clearInterval(interval);
+        if (!cancelled && attempts >= maxAttempts) {
+          setError(
+            'Не удалось получить данные авторизации. Откройте приложение из меню бота (кнопка с приложением в Telegram), а не из обычной клавиатуры.',
+          );
         }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
+        return;
+      }
+      attempts += 1;
+      const data = (window as typeof win).Telegram?.WebApp?.initData;
+      if (data?.trim()) {
+        clearInterval(interval);
+        tryAuth(data);
+      }
+    }, 100);
+
     return () => {
       cancelled = true;
+      clearInterval(interval);
     };
   }, [setAuth, navigate]);
 
@@ -126,7 +159,7 @@ export function SignInPage() {
 
   const isMiniApp =
     typeof window !== 'undefined' &&
-    !!(window as { Telegram?: { WebApp?: { initData?: string } } }).Telegram?.WebApp?.initData?.trim();
+    !!(window as { Telegram?: { WebApp?: unknown } }).Telegram?.WebApp;
 
   if (!botUsername && !isMiniApp) {
     return (
