@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { CreateTaskForm } from '@features/tasks/create-task';
+import { TaskCreateTabs } from '@features/task-create';
 import { Button, Card } from '@shared/ui';
 import styles from './create.module.css';
 
@@ -24,7 +24,7 @@ export function TaskCreatePage() {
         </div>
         <Card>
           <h2 className={styles.title}>Создать новую задачу</h2>
-          <CreateTaskForm onSuccess={handleTaskCreated} />
+          <TaskCreateTabs onSuccess={handleTaskCreated} />
         </Card>
       </div>
     </div>

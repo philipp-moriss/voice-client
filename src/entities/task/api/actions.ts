@@ -3,11 +3,11 @@ import type { CreateTaskDto, Task, TaskStatus, UpdateTaskDto } from "../model/ty
 
 export const createTaskAction = async (
   title: string,
-  description: string
+  description?: string
 ): Promise<Task> => {
   const data: CreateTaskDto = {
     title: title.trim(),
-    description: description.trim() || undefined,
+    description: description?.trim() ?? undefined,
   };
   return taskApi.createTask(data);
 };

@@ -1,0 +1,10 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.error {
+  color: var(--color-danger, #dc2626);
+  font-size: 0.9rem;
+}

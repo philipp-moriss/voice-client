@@ -27,3 +27,17 @@ export interface UpdateTaskDto {
   status?: TaskStatus;
 }
 
+/** Draft task before persistence (voice/assistant/manual). */
+export type TaskDraftSource = 'voice' | 'assistant' | 'manual';
+
+export interface TaskDraft {
+  title: string;
+  description?: string;
+  source: TaskDraftSource;
+  audioDurationSec?: number;
+  transcription?: string;
+}
+
+/** Selected mode on the Create Task screen. */
+export type CreationMode = 'voice' | 'assistant' | 'manual';
+
