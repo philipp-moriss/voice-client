@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Input, Textarea } from '@shared/ui';
-import { useTaskCreate } from '../model';
 import styles from './TaskCreateManualTab.module.css';
+import { useTaskCreate } from '../../model';
 
 interface TaskCreateManualTabProps {
   onSave: (override?: { title: string; description?: string }) => void;
