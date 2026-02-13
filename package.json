@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "copy:fav": "node scripts/copy-fav.mjs",
-    "dev": "npm run copy:fav && vite",
-    "build": "npm run copy:fav && tsc -b && vite build",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
