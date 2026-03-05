@@ -159,7 +159,8 @@ export function SignInPage() {
 
   const isMiniApp =
     typeof window !== 'undefined' &&
-    !!(window as { Telegram?: { WebApp?: unknown } }).Telegram?.WebApp;
+    !!(window as { Telegram?: { WebApp?: unknown } }).Telegram?.WebApp
+    && (window as { Telegram?: { WebApp?: { initData?: string } } }).Telegram?.WebApp?.initData !== "";
 
   if (!botUsername && !isMiniApp) {
     return (
